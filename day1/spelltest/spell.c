@@ -33,7 +33,7 @@ char** filter(char** strings, int* len, bool (*check)(char* str, void* data), vo
 		}
 	}
 
-
+	// Filling return array with strings whose ids are inside filtered_ids
 }
 
 int main(int argc, char* argv[]) {
