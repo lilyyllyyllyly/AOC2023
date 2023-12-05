@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "spell.h"
+
 int main(int argc, char* argv[]) {
 	if (argc < 2) {
 		fprintf(stderr, "ERROR: calibration file not specified!\n");
@@ -23,8 +25,14 @@ int main(int argc, char* argv[]) {
 		// Going through the characters left to right to find the first digit
 		for (int i = 0; i < len; ++i) {
 			number[0] = line[i];
-			if (number[0] <= '9' && number[0] >= '0') {
+			if (number[0] <= '9' && number[0] >= '0') { // Current char is a digit
 				break;
+			} else { // If its not, see if its the start of a spelled out number
+				int spelled_number = find_number(&line[i]);
+				if (spelled_number != -1) { // It is!
+					number[0] = '0' + spelled_number;
+					break;
+				}
 			}
 		}
 
@@ -35,8 +43,14 @@ int main(int argc, char* argv[]) {
 		// Going through the characters right to left to find the last digit
 		for (int i = len-1; i >= 0; --i) {
 			number[1] = line[i];
-			if (number[1] <= '9' && number[1] >= '0') {
+			if (number[1] <= '9' && number[1] >= '0') { // Current char is a digit
 				break;
+			} else { // If its not, see if its the start of a spelled out number
+				int spelled_number = find_number(&line[i]);
+				if (spelled_number != -1) { // It is!
+					number[1] = '0' + spelled_number;
+					break;
+				}
 			}
 		}
 

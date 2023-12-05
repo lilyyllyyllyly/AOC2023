@@ -2,7 +2,7 @@ COMP=clang
 OPTIONS=-Wall -Wextra -Werror -O3
 DEBUG=-fsanitize=address,undefined -g3
 
-SOURCES=trebuchet.c
+SOURCES=trebuchet.c spell.c
 OUTPUT=trebuchet
 
 final:
