@@ -2,9 +2,13 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#define PRINT 1
+
 FILE* file;
 
 int get_location(long seed) {
+	if (PRINT) printf("\nseed: %ld\n", seed);
+
 	size_t alloc = sizeof(char);
 	char* line = malloc(alloc);
 	char* curr = line;
@@ -30,10 +34,9 @@ int get_location(long seed) {
 
 			if (seed >= source_start && seed < source_start + range_size) {
 				seed += dest_start - source_start;
-				printf("new: %ld\n", seed);
+				if (PRINT) printf("new: %ld\n", seed);
 				break;
 			}
-			printf("didnt fit range.\n");
 		}
 	}
 	
@@ -47,13 +50,13 @@ int get_location(long seed) {
 
 int main(int argc, char* argv[]) {
 	if (argc < 2) {
-		fprintf(stderr, "ERROR: calibration file not specified!\n");
+		if (PRINT) fprintf(stderr, "ERROR: calibration file not specified!\n");
 		return 1;
 	}
 
 	file = fopen(argv[1], "r");
 	if (!file) {
-		fprintf(stderr, "ERROR: could not open file %s.\n", argv[1]);
+		if (PRINT) fprintf(stderr, "ERROR: could not open file %s.\n", argv[1]);
 		return 1;
 	}
 
@@ -62,15 +65,15 @@ int main(int argc, char* argv[]) {
 	int len;
 	char* curr;
 
-	// Counting seeds
+	// Counting seed ranges
 	len = getline(&line, &alloc, file);
 	curr = line;
 
 	while ((intptr_t)curr - (intptr_t)line < len && (*curr > '9' || *curr < '0')) curr = &curr[1]; // Move to first digit
 	char* first_digit = curr;
-	printf("f - %c\n", *first_digit);
+	if (PRINT) printf("f - %c\n", *first_digit);
 
-	int seed_count = 0;
+	int range_count = 0;
 	while (curr) {
 		char* end = NULL;
 		strtol(curr, &end, 10);
@@ -78,33 +81,41 @@ int main(int argc, char* argv[]) {
 		if (curr == end) break;
 		curr = end;
 
-		++seed_count;
+		++range_count;
 	}
-	printf("seed count:%d\n", seed_count);
+	range_count /= 2;
+	if (PRINT) printf("range count:%d\n", range_count);
 
-	// Getting seeds
+	// Allocating and fllling range arrays
+	long* range_starts  = malloc(range_count * sizeof(long));
+	long* range_lengths = malloc(range_count * sizeof(long));
+
 	curr = first_digit;
-	long* values = malloc(seed_count * sizeof(long));
-	for (int i = 0; i < seed_count; ++i) {
-		values[i] = strtol(curr, &curr, 10);
-		printf("seed: %ld\n", values[i]);
+	for (int i = 0; i < range_count; ++i) {
+		range_starts[i]  = strtol(curr, &curr, 10);
+		range_lengths[i] = strtol(curr, &curr, 10);
+		if (PRINT) printf("range: %ld - %ld (%ld)\n", range_starts[i], range_starts[i] + range_lengths[i], range_lengths[i]);
 	}
 
 	// Getting location for all seeds and find minimum
-	long min = values[0] = get_location(values[0]);
-	printf("final: %ld\n\n", values[0]);
+	long min;
 
-	for (int i = 1; i < seed_count; ++i) {
-		values[i] = get_location(values[i]);
-		if (values[i] < min) min = values[i];
+	for (int i = 0; i < range_count; ++i) {
+		for (long j = range_starts[i]; j < range_starts[i] + range_lengths[i]; ++j) {
+			long value = get_location(j);
 
-		printf("final: %ld\n\n", values[i]);
+			if (i == 0 && j == range_starts[i]) min = value;
+			if (value < min) min = value;
+
+			if (PRINT) printf("final: %ld\n", value);
+		}
 	}
 	fclose(file);
 
 	printf("\nmin: %ld\n", min);
 
-	free(values);
+	free(range_starts);
+	free(range_lengths);
 	free(line);
 	return 0;
 }
