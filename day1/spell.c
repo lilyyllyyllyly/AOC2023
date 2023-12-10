@@ -26,10 +26,11 @@ static int check_firstc(char* str, void* data) {
 
 // Filter string array using check function
 //
-// strings: array to filter (will be altered)
+// strings: array to filter
 // len: pointer to the array's lenght (will be altered to the filtered array's length)
 // check: function that determines if the string str should be in the filtered array
 // check_data: additional data to pass into check function
+// returns: strings left after filtering
 static char** filter(char* strings[], int* len, int (*check)(char* str, void* data), void* check_data, int offset) {
 	char** filtered_strings = calloc(*len, sizeof(char*));
 
