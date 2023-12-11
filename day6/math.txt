@@ -1,0 +1,64 @@
+x: time the button was held
+y: total time
+f(x): distance travelled
+
+f(x) = x * (y-x)
+f(x) = x*y - x*x
+f(x) = xy - x²
+-----------------
+|f(x) = -x² + xy|
+-----------------
+
+--------------------------------------------------------------
+
+BEATING RECORD
+
+z: record
+
+f(x) = -x² + xy
+-x² + xy = z
+-x² + xy - z = 0
+a = -1
+b = y
+c = -z
+
+delta = b²-4ac
+delta = y²-4*-1*-z
+delta = y²-4z
+
+x  = (-y±sqrt(y²-4z))/-2
+x₁ = (-y+sqrt(y²-4z))/-2
+x₂ = (-y-sqrt(y²-4z))/-2
+
+any value greater than x₁ and smaller than x₂ will beat the record
+
+--------------------------------------------------------------
+
+MOST OPTIMAL SOLUTION
+
+the vertex of the parabola formed by the quadratic equation represents the value of x that results in the highest distance travelled.
+the vertex is equal to the average of the two roots of the equation.
+
+finding roots:
+
+-x²+xy = 0
+
+a = -1
+b = y
+c= 0
+
+delta = b²-4ac
+y²-4*1*0
+
+delta = y²
+sqrt(delta) = y
+
+x = (-y±y)/-2
+----------------
+|x₁= 0         |
+|x₂= -2y/-2 = y|
+----------------
+		     -----
+vertex = (x₁+x₂)/2 = |y/2| <- most optimal time to hold the button
+		     -----
+
