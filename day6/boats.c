@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
 	while ((*curr > '9' || *curr < '0') && (intptr_t)line - (intptr_t)curr < len) curr = &curr[1]; // Going to first digit
 	
 	int race_count = 0;
-	for (race_count = 0; curr != NULL; ++race_count) strtol(curr, &curr, 10);
+	for (race_count = 0; (intptr_t)curr - (intptr_t)line < len-1; ++race_count) strtol(curr, &curr, 10);
 
 	  // - Create arrays for race times and records
 	int race_times[race_count];
@@ -43,14 +43,14 @@ int main(int argc, char* argv[]) {
 	  // - Filling arrays
 	    // - Race time
 	curr = line;
-	while ((*curr > '9' || *curr < '0') && (intptr_t)line - (intptr_t)curr < len) curr = &curr[1]; // Going to first digit
-	for (int i = 0; i < race_count; ++i) race_times[i] = atoi(curr);
+	while ((*curr > '9' || *curr < '0') && (intptr_t)curr - (intptr_t)line < len) curr = &curr[1]; // Going to first digit
+	for (int i = 0; i < race_count; ++i) race_times[i] = (int)strtol(curr, &curr, 10);
 
 	    // - Record time
 	len = getline(&line, &alloc, file);
 	curr = line;
 	while ((*curr > '9' || *curr < '0') && (intptr_t)line - (intptr_t)curr < len) curr = &curr[1]; // Going to first digit
-	for (int i = 0; i < race_count; ++i) race_records[i] = atoi(curr);
+	for (int i = 0; i < race_count; ++i) race_records[i] = (int)strtol(curr, &curr, 10);
 	  //
 
 	  // - Freeing
@@ -69,8 +69,8 @@ int main(int argc, char* argv[]) {
 		int max = max_record - (int)max_record > 0? (int)max_record : (int)max_record-1; // First integer below max_record
 		//
 
-		mult *= max-min; // Number of ways to beat record
-		printf("times that beat race %d's record: %d - %d (possibilities: %d)\n", i, min, max, max-min);
+		mult *= max-min + 1; // Number of ways to beat record
+		printf("times that beat race %d's record: %d - %d (possibilities: %d)\n", i, min, max, max-min + 1);
 	}
 
 	printf("mult: %d\n", mult);

@@ -34,7 +34,7 @@ any value greater than x₁ and smaller than x₂ will beat the record
 
 --------------------------------------------------------------
 
-MOST OPTIMAL SOLUTION
+MOST OPTIMAL SOLUTION (this is just for fun)
 
 the vertex of the parabola formed by the quadratic equation represents the value of x that results in the highest distance travelled.
 the vertex is equal to the average of the two roots of the equation.
@@ -61,4 +61,4 @@ x = (-y±y)/-2
 		     -----
 vertex = (x₁+x₂)/2 = |y/2| <- most optimal time to hold the button
 		     -----
-
+(which was obvious from the start but math is fun :3 )
